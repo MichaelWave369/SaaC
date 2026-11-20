@@ -47,6 +47,7 @@ test("search matches title, tags and original blob text", async () => {
 
 test("tags normalize, trim and deduplicate", () => {
   assert.deepEqual(normalizeTags(" Funk, music ,funk,  DIY "), ["funk", "music", "diy"]);
+  assert.equal(normalizeTags("x".repeat(100))[0].length, 60);
 });
 
 test("identical content yields the same SHA-256 blob ID", async () => {
