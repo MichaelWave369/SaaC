@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142822">
+  <meta name="description" content="The Magic SaaC. Software as a Contribution: an open, local-first pocket commons for ideas, projects, and knowledge.">
+  <title>The Magic SaaC · Software as a Contribution</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/app.mjs"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Pocket navigation">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">S<span>∞</span>C</div>
+        <div><strong>THE MAGIC SaaC</strong><small>FROM THE HOLLERS, FOR THE HOLLERS</small></div>
+      </div>
+      <div class="sidebar-intro">
+        <span class="eyebrow">WELCOME TO THE COMMONS</span>
+        <p>Every idea deserves a pocket. Every pocket has room to grow.</p>
+      </div>
+      <div class="sidebar-heading">
+        <span>YOUR POCKETS</span>
+        <button id="newPocket" class="icon-button" type="button" aria-label="Create nested pocket" title="Create pocket">+</button>
+      </div>
+      <nav id="pockets" aria-label="Nested pockets"></nav>
+      <div class="sidebar-footer">
+        <span class="connection-dot"></span> LOCAL-FIRST · OPEN SOURCE
+        <p>No account. No subscription. Your SaaC, your rules.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <label class="search-label">
+          <span aria-hidden="true">⌕</span>
+          <span class="sr-only">Search your contributions</span>
+          <input id="search" type="search" placeholder="Find something in the SaaC..." autocomplete="off">
+        </label>
+        <div class="top-actions">
+          <button type="button" id="surprise" class="quiet-button">✦ Surprise me</button>
+          <button type="button" id="exportVault" class="quiet-button">↓ Export</button>
+          <label class="quiet-button import-button" for="importVault">↑ Import
+            <input id="importVault" type="file" accept=".json,application/json" aria-label="Import SaaC JSON export">
+          </label>
+        </div>
+      </div>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <span class="eyebrow">SOFTWARE AS A CONTRIBUTION · EST. 2026</span>
+          <h1 id="hero-title">A little magic.<br><em>A whole lotta SaaC.</em></h1>
+          <p>The Appalachian idea commons. Tuck away a thought, grow a project, share what matters. The more we put in, the more everybody gets out.</p>
+          <button type="button" id="newEntry" class="primary">+ Toss something in the SaaC</button>
+        </div>
+        <div class="pocket-art" aria-hidden="true">
+          <div class="square square-outer"><div class="square square-middle"><div class="square square-inner"><div class="magic-symbol">✳</div></div></div></div>
+          <span class="art-caption">NESTED BLOB GEAR / V0</span>
+        </div>
+      </section>
+
+      <section class="stats" aria-label="SaaC storage statistics">
+        <div><strong id="entryCount">0</strong><span>CONTRIBUTIONS</span></div>
+        <div><strong id="pocketCount">0</strong><span>NESTED POCKETS</span></div>
+        <div><strong id="blobCount">0</strong><span>UNIQUE BLOBS</span></div>
+      </section>
+
+      <section class="workspace" aria-labelledby="currentPocket">
+        <div class="section-top">
+          <div>
+            <div id="breadcrumbs" class="breadcrumbs" aria-label="Pocket breadcrumb"></div>
+            <h2 id="currentPocket">The SaaC</h2>
+            <span id="resultCount" class="results">0 contributions</span>
+          </div>
+          <label class="filter-label">Show
+            <select id="kindFilter" aria-label="Filter by contribution type">
+              <option value="all">Everything</option>
+              <option value="idea">Ideas</option>
+              <option value="note">Knowledge</option>
+              <option value="project">Projects</option>
+              <option value="link">Resources</option>
+              <option value="snippet">Snippets</option>
+            </select>
+          </label>
+        </div>
+        <div id="entries" class="entry-grid"></div>
+        <section id="detail" class="detail" hidden aria-labelledby="detailTitle">
+          <div class="detail-head"><span id="detailType" class="kind"></span><button id="closeDetail" class="quiet-button" type="button">× Close</button></div>
+          <h2 id="detailTitle"></h2>
+          <p id="detailSummary"></p>
+          <div class="detail-meta"><span>POCKET · <span id="detailPocket"></span></span><span id="detailTags"></span></div>
+          <pre id="detailBody" tabindex="0"></pre>
+          <p class="hash-label">SHA-256 CONTENT ID: <code id="detailHash"></code></p>
+        </section>
+      </section>
+      <footer class="main-footer">
+        <p>People Above Profit. Prosperity Without Exploitation.</p>
+        <p>Made for sharing, not for selling the same button every month. <a href="https://github.com/MichaelWave369/SaaC" rel="noopener noreferrer">Contribute on GitHub ↗</a></p>
+      </footer>
+    </main>
+  </div>
+
+  <div id="status" role="status" aria-live="polite" class="status">Opening the SaaC...</div>
+
+  <dialog id="entryDialog" aria-labelledby="entryFormTitle">
+    <form id="entryForm">
+      <div class="dialog-heading"><span class="eyebrow">ANOTHER LITTLE BIT OF MAGIC</span><h2 id="entryFormTitle">Toss something in.</h2><p>Destination: <strong id="entryPocket"></strong></p></div>
+      <label>Give it a name<input id="entryTitle" name="title" required maxlength="180" placeholder="The next big holler idea" autofocus></label>
+      <label>What kind of treasure?
+        <select name="kind"><option value="idea">Idea</option><option value="note">Knowledge</option><option value="project">Project</option><option value="link">Resource / link</option><option value="snippet">Code snippet</option></select>
+      </label>
+      <label>Short description<textarea name="summary" maxlength="2000" rows="2" placeholder="A sentence to remember what this is..."></textarea></label>
+      <label>Content<textarea name="body" required rows="7" placeholder="Put the whole idea, note, code, or link here..."></textarea></label>
+      <label>Tags <small>(comma-separated)</small><input name="tags" placeholder="open-source, music, tinkering"></label>
+      <div class="dialog-actions"><button class="quiet-button" type="button" onclick="this.closest('dialog').close()">Never mind</button><button id="saveEntry" class="primary" type="submit">Add to SaaC</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="pocketDialog" aria-labelledby="pocketFormTitle">
+    <form id="pocketForm">
+      <div class="dialog-heading"><span class="eyebrow">A POCKET INSIDE A POCKET</span><h2 id="pocketFormTitle">Sew in a new pocket.</h2><p>Inside: <strong id="pocketParent"></strong></p></div>
+      <label>Pocket name<input id="pocketName" name="name" required maxlength="120" placeholder="Ideas from the holler" autofocus></label>
+      <label>Description <small>(optional)</small><textarea name="description" rows="3" placeholder="What's this pocket for?"></textarea></label>
+      <div class="dialog-actions"><button class="quiet-button" type="button" onclick="this.closest('dialog').close()">Never mind</button><button id="savePocket" class="primary" type="submit">Create pocket</button></div>
+    </form>
+  </dialog>
+</body>
+</html>
