@@ -13,7 +13,7 @@ export function newVault() {
 
 export function normalizeTags(value) {
   const source = Array.isArray(value) ? value.join(",") : String(value ?? "");
-  return [...new Set(source.split(",").map(tag => tag.trim().toLowerCase()).filter(Boolean))].slice(0, 20);
+  return [...new Set(source.split(",").map(tag => tag.trim().toLowerCase().slice(0, 60)).filter(Boolean))].slice(0, 20);
 }
 
 export async function hashText(value) {
